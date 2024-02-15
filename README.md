@@ -31,4 +31,4 @@ Alternatively you can also grab the example dashboard from Grafana itself:
 * https://grafana.com/grafana/dashboards/17782-m5stickc-plus-celsius/
 * https://grafana.com/grafana/dashboards/17925-m5stickc-plus-fahrenheit/
 
-![image](https://user-images.githubusercontent.com/1435796/210529949-2c301a6d-2f37-4e90-9fb9-1150d137b6ac.png)
+![image](https://github.com/grafana/M5StickCPlus2/blob/main/example-celcius.png)
