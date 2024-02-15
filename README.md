@@ -1,4 +1,4 @@
-# M5StickC Plus
+# M5StickC Plus2
 
 ## Introduction
 Example ESP32 project to showcase how you can pull temperature, humidity and pressure data from the ENV III sensor paired with the M5 StickC Plus2.
