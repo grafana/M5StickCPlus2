@@ -28,7 +28,7 @@ There is an example dashboard that you can use inside Grafana for this project, 
 ```20487``` for Dashboard using Fahrenheit. 
 
 Alternatively you can also grab the example dashboard from Grafana itself: 
-* https://grafana.com/grafana/dashboards/17782-m5stickc-plus-celsius/
-* https://grafana.com/grafana/dashboards/17925-m5stickc-plus-fahrenheit/
+* https://grafana.com/grafana/dashboards/20486-m5stickc-plus2-celsius/
+* https://grafana.com/grafana/dashboards/20487-m5stickc-plus2-fahrenheit/
 
 ![image](https://github.com/grafana/M5StickCPlus2/blob/main/example-celcius.png)
