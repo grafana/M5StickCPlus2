@@ -6,7 +6,13 @@
 // Register for a free Grafana Cloud account including free metrics and logs: https://grafana.com
 
 #include "M5StickCPlus2.h"
-#include "M5_ENV.h"
+
+// If using version 0.0.9 or earlier of the M5Unit-ENV library, use the older include filename
+// Also search this file for "M5Unit-ENV" for additional code changes for 0.0.9 > 1.0.0 library update
+// #include "M5_ENV.h"
+
+// Use this include file for version 1.0.0 and later of the M5Unit-ENV library
+#include "M5UnitENV.h"
 
 // ===================================================
 // All the things that needs to be changed 
@@ -64,9 +70,19 @@ void setup() {
     StickCP2.Display.printf("== Grafana Labs ==");
     StickCP2.Display.setTextColor(WHITE, BLACK);
 
-    Wire.begin(32, 33);       // Wire init, adding the I2C bus.  
-    qmp6988.init();           // Initiallize the pressure sensor    
-    sht30.init();             // Initialize the temperature sensor
+    // If using version 0.0.9 or earlier of the M5Unit-ENV library, use the older init calls
+    // Wire.begin(32, 33);       // Wire init, adding the I2C bus.  
+    // qmp6988.init();           // Initiallize the pressure sensor    
+    // sht30.init();             // Initialize the temperature sensor
+
+    // Updated init code for for version 1.0.0 and later of the M5Unit-ENV library
+    Wire.begin();       // Wire init, adding the I2C bus.  
+    if (!qmp6988.begin(&Wire, QMP6988_SLAVE_ADDRESS_L, 32, 33, 400000U)) {
+        Serial.println("Couldn't find QMP6988");
+    }
+    if (!sht30.begin(&Wire, SHT3X_I2C_ADDR, 32, 33, 400000U)) {
+        Serial.println("Couldn't find SHT3X");
+    }
 
     StickCP2.Display.setCursor(10, 30);
     StickCP2.Display.printf("Hello, %s", YOUR_NAME);
@@ -116,8 +132,18 @@ void loop() {
     Serial.printf("\r\n====================================\r\n");
 
     // Get new updated values from our sensor
-    pressure = qmp6988.calcPressure();
-    if (sht30.get() == 0) {     // Obtain the data of sht30.
+    
+    // If using version 0.0.9 or earlier of the M5Unit-ENV library, no read or update call required
+    // pressure = qmp6988.calcPressure();
+    // Updated read data code for for version 1.0.0 and later of the M5Unit-ENV library
+    if (qmp6988.update()) {
+        pressure = qmp6988.calcPressure();
+    }
+
+    // If using version 0.0.9 or earlier of the M5Unit-ENV library
+    // if (sht30.get() == 0) {     // Obtain the data of sht30.
+    // Updated update data code for for version 1.0.0 and later of the M5Unit-ENV library
+    if (sht30.update()) {     // Obtain the data of sht30.
         temp = sht30.cTemp;      // Store the temperature obtained from sht30.
         hum  = sht30.humidity;   // Store the humidity obtained from the sht30.
     } else {
