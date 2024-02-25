@@ -6,12 +6,6 @@
 // Register for a free Grafana Cloud account including free metrics and logs: https://grafana.com
 
 #include "M5StickCPlus2.h"
-
-// If using version 0.0.9 or earlier of the M5Unit-ENV library, use the older include filename
-// Also search this file for "M5Unit-ENV" for additional code changes for 0.0.9 > 1.0.0 library update
-// #include "M5_ENV.h"
-
-// Use this include file for version 1.0.0 and later of the M5Unit-ENV library
 #include "M5UnitENV.h"
 
 // ===================================================
@@ -70,12 +64,6 @@ void setup() {
     StickCP2.Display.printf("== Grafana Labs ==");
     StickCP2.Display.setTextColor(WHITE, BLACK);
 
-    // If using version 0.0.9 or earlier of the M5Unit-ENV library, use the older init calls
-    // Wire.begin(32, 33);       // Wire init, adding the I2C bus.  
-    // qmp6988.init();           // Initiallize the pressure sensor    
-    // sht30.init();             // Initialize the temperature sensor
-
-    // Updated init code for for version 1.0.0 and later of the M5Unit-ENV library
     Wire.begin();       // Wire init, adding the I2C bus.  
     if (!qmp6988.begin(&Wire, QMP6988_SLAVE_ADDRESS_L, 32, 33, 400000U)) {
         Serial.println("Couldn't find QMP6988");
@@ -132,23 +120,15 @@ void loop() {
     Serial.printf("\r\n====================================\r\n");
 
     // Get new updated values from our sensor
-    
-    // If using version 0.0.9 or earlier of the M5Unit-ENV library, no read or update call required
-    // pressure = qmp6988.calcPressure();
-    // Updated read data code for for version 1.0.0 and later of the M5Unit-ENV library
     if (qmp6988.update()) {
         pressure = qmp6988.calcPressure();
     }
-
-    // If using version 0.0.9 or earlier of the M5Unit-ENV library
-    // if (sht30.get() == 0) {     // Obtain the data of sht30.
-    // Updated update data code for for version 1.0.0 and later of the M5Unit-ENV library
     if (sht30.update()) {     // Obtain the data of sht30.
         temp = sht30.cTemp;      // Store the temperature obtained from sht30.
         hum  = sht30.humidity;   // Store the humidity obtained from the sht30.
     } else {
         temp = 0, hum = 0;
-    }
+    }    
     if (pressure < 950) { ESP.restart(); } // Sometimes this sensor fails, and if we get an invalid reading it's best to just restart the controller to clear it out
     if (pressure/100 > 1200) { ESP.restart(); } // Sometimes this sensor fails, and if we get an invalid reading it's best to just restart the controller to clear it out
     Serial.printf("Temp: %2.1f °C \r\nHumidity: %2.0f%%  \r\nPressure:%2.0f hPa\r\n\n", temp, hum, pressure / 100);
